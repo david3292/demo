@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Evaluación</title>
+
+<link rel="stylesheet" type="text/css" href="dist/semantic.css">
+<script type="text/javascript" src="assets/js/jquery/jquery.js"></script>
+<script type="text/javascript" src="dist/semantic.js"></script>
+<script type="text/javascript" src="assets/js/jquery/jquery.inputmask.js"></script>
+<script type="text/javascript" src="assets/js/articulo.js"></script>
+
+<!--- Example CSS -->
+<style>
+body {
+	padding: 1em;
+}
+
+.ui.menu {
+	margin: 3em 0em;
+}
+
+.ui.menu:last-child {
+	margin-bottom: 110px;
+}
+</style>
+
+<!--- Example Javascript -->
+<script>
+	$(document).ready(function() {
+		$('.ui.menu .ui.dropdown').dropdown({
+			on : 'hover'
+		});
+		$('.ui.menu a.item').on('click', function() {
+			$(this).addClass('active').siblings().removeClass('active');
+		});
+	});
+</script>
+</head>
+<body>
+
+	<div class="ui menu">
+		<a class="item" href="cliente">Clientes</a> 
+		<a class="active item" href="articulo">Articulos</a> 
+		<a class="item" href="orden">Ordenes</a>
+	</div>
+	<div class="ui main">
+		<div class="ui two column centered grid">
+			<div class="column row">
+				<button id="btn-agregar-articulo" class="ui green basic button"
+					onclick="mostrarModal(1);">
+					<i class="icon plus circle"></i> Nuevo Artículo
+				</button>
+			</div>
+			<div class="column">
+				<div class="ui middle aligned divided list">
+					<div th:each="articulo : ${articulos}" class="item">
+						<div class="right floated content">
+							<div class="ui small basic icon buttons">
+								<button class="ui button" th:id-articulo="${articulo.idArticulo}"
+									onclick="verArticulo(this);">
+									<i class="edit icon"></i>
+								</button>
+								<button class="ui button" th:id-articulo="${articulo.idArticulo}"
+									onclick="eliminarArticulo(this);">
+									<i class="trash alternate outline icon"></i>
+								</button>
+							</div>
+						</div>
+						<div
+							th:text="${articulo.idArticulo} + ' - ' + ${articulo.nombreArticulo} + ' - $' + ${articulo.precioUnitario}"
+							class="content"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- modal para agregar o editar un articulo -->
+	<div class="ui small modal">
+		<div id="modal-titulo" class="header">Crear Artículo</div>
+
+		<div class="content">
+			<div class="ui form">
+				<div class="field">
+					<label>Código</label> <input id="id-articulo" name="empty"
+						type="text" disabled="disabled">
+				</div>
+				<div class="field focus">
+					<label>Nombre</label> <input id="nombre-articulo" type="text">
+				</div>
+				<div class="field">
+					<label>Precio</label> <input id="precio-unitario" type="text" class="decimal">
+				</div>
+			</div>
+		</div>
+
+		<div class="actions">
+			<div class="ui black deny button">Cancelar</div>
+			<div id="btn-articulo" class="ui positive right icon button">
+				Aceptar</div>
+		</div>
+	</div>
+</body>
+</html>
