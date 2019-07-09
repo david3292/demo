@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.evaluacion.model.Orden;
 import com.evaluacion.service.IOrdenService;
+import com.evaluacion.tx.TxOrden;
 import com.evaluacion.util.Respuesta;
 
 @RestController
@@ -24,11 +25,15 @@ public class OrdenApi {
 	@Autowired
 	private IOrdenService servicio;
 	
+	@Autowired
+	private TxOrden txOrden;
+	
 	@PostMapping(value = "/crear", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Respuesta> crearCliente(@RequestBody Orden orden){
+	public ResponseEntity<Respuesta> crearOrden(@RequestBody Orden orden){
 		Respuesta respuesta = new Respuesta();
 		try {
 			orden.setFechaCompra(LocalDate.now());
+			orden.getDetallesOrden().forEach(x -> x.getArticulo().setCantidadDisponible(x.getArticulo().getCantidadDisponible() - 1));
 			this.servicio.create(orden);
 			respuesta.setCodigo(Respuesta.CORRECTO);
 			respuesta.setMensaje("Cliente guardado correctamente");
@@ -36,7 +41,21 @@ public class OrdenApi {
 		} catch (Exception e) {
 			e.printStackTrace();
 			respuesta.setCodigo(Respuesta.ERROR);
-			respuesta.setMensaje("Ha ocurrido un error al intentar guardar al cliente");
+			respuesta.setMensaje("Ha ocurrido un error al intentar guardar la orden");
+			return new ResponseEntity<Respuesta>(respuesta, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@PostMapping(value = "/crear-tx", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Respuesta> crearOrdenTx(@RequestBody Orden orden){
+		Respuesta respuesta = new Respuesta();
+		try {
+			respuesta = txOrden.txOrden(orden);			
+			return new ResponseEntity<Respuesta>(respuesta, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			respuesta.setCodigo(Respuesta.ERROR);
+			respuesta.setMensaje("Ha ocurrido un error al intentar guardar la orden");
 			return new ResponseEntity<Respuesta>(respuesta, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}

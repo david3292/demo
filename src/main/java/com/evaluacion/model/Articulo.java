@@ -22,6 +22,9 @@ public class Articulo {
 	@Column(name = "precio_unitario", nullable = false, columnDefinition = "decimal(10,6)")
 	private Double precioUnitario;
 	
+	@Column(name = "cantidad_disponible", nullable = false)
+	private Integer cantidadDisponible;
+	
 	public Integer getIdArticulo() {
 		return idArticulo;
 	}
@@ -39,6 +42,12 @@ public class Articulo {
 	}
 	public void setPrecioUnitario(Double precioUnitario) {
 		this.precioUnitario = precioUnitario;
+	}
+	public Integer getCantidadDisponible() {
+		return cantidadDisponible;
+	}
+	public void setCantidadDisponible(Integer cantidadDisponible) {
+		this.cantidadDisponible = cantidadDisponible;
 	}
 	
 }

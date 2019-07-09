@@ -97,7 +97,7 @@ function crearOrden() {
 	console.log(JSON.stringify(orden));
 	$.ajax({
 		type : "POST",
-		url : "http://localhost:8085/orden/crear",
+		url : "http://localhost:8085/orden/crear-tx",
 		data : JSON.stringify(orden),
 		async : true,
 		beforeSend : function(xhr) {

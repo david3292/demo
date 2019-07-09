@@ -22,6 +22,7 @@ function mostrarModal(opcion) {
 			crearModificarArticulo({
 				"idArticulo" : idArticulo,
 				"nombreArticulo" : $('#nombre-articulo').val(),
+				"cantidadDisponible" : $('#cantidad-articulo').val(),
 				"precioUnitario" : $('#precio-unitario').val()
 			});
 		}
@@ -61,6 +62,7 @@ function verArticulo(that) {
 		success : function(articulo) {
 			$('#id-articulo').val(articulo.idArticulo);
 			$('#nombre-articulo').val(articulo.nombreArticulo);
+			$('#cantidad-articulo').val(articulo.nombreArticulo);
 			$('#precio-unitario').val(articulo.precioUnitario);
 			$('#modal-titulo').text('Modificar Articulo');
 			$('#btn-articulo').text('Modificar');
@@ -98,6 +100,7 @@ function eliminarArticulo(that) {
 function resetearArticuloVista() {
 	$('#id-articulo').val('');
 	$('#nombre-articulo').val('');
+	$('#cantidad-articulo').val('');
 	$('#precio-unitario').val('');
 	$('#modal-titulo').text('Crear Artículo');
 	$('#btn-articulo').text('Aceptar');
